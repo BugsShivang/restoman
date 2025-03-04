@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Signed In Employees</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Surname</th>
+            <th scope="col">Email ID</th>
+            <th scope="col">Phone Number</th>
+            <th scope="col">Address</th>
+            <th scope="col">Time In</th>
+            <th scope="col">Time Out</th>
+            <th scope="col">Branch</th> <!-- Add a column for the branch -->
+        </tr>
+    </thead>
+    <tbody>
+        {% if employees %}
+            {% for employee in employees %}
+            <tr>
+                <td>{{ employee.first_name }} <a href="{% url 'update-employee' employee.pk %}"><i class="fa fa-pencil text-primary ms-1"></i></a></td>
+                <td>{{ employee.surname }}</td>
+                <td>{{ employee.email_id }}</td>
+                <td>{{ employee.phone_number }}</td>
+                <td>{{ employee.address }}</td>
+                <td>{{ employee.time_in }}</td>
+                
+                {% if employee.time_out %}
+                    <td>{{ employee.time_out }}</td>
+                {% else %}
+                    <td><a href="{% url 'sign-out-employee' employee.pk %}">Sign Out</a></td>
+                {% endif %}
+
+                <!-- Check if the employee has a branch and display its name, else show a default message -->
+                <td>
+                    {% if employee.branch %}
+                        {{ employee.branch.name }}
+                    {% else %}
+                        No branch assigned
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="8">No employees found</td> <!-- Adjusted colspan for 8 columns -->
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+{% endblock %}
